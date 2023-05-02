@@ -7,7 +7,7 @@ from models.state import State
 
 
 @app_views.route('/states', methods=['GET', 'POST'])
-def states():
+def all_states():
     """Defines GET and POST methods for route"""
     states = storage.all("State").values()
     if request.method == 'GET':
@@ -18,7 +18,7 @@ def states():
         return "Not a JSON", 400
     if res.get("name") is None:
         return "Missing name", 400
-    state = State(**data)
+    state = State(**res)
     state.save()
     return jsonify(state.to_dict()), 201
 

@@ -7,11 +7,11 @@ from models.amenity import Amenity
 
 
 @app_views.route('/amenities', methods=['GET', 'POST'])
-def amenities():
+def all_amenities():
     """Defines GET and POST methods for amenities route"""
-    amenity = storage.all("Amenity").values()
+    amenities = storage.all("Amenity").values()
     if request.method == 'GET':
-        return jsonify([amenity.to_dict()], amenity=amenity)
+        return jsonify([amenities.to_dict()], amenities=amenities)
 
     res = request.get_json(silent=True)
     if data is None:

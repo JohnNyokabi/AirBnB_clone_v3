@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Script for starting flask web application
 """
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, make_response, url_for, render_template
 from models import storage
 from api.v1.views import app_views
 from flask_cors import CORS
@@ -10,6 +10,7 @@ from os import getenv
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 app.register_blueprint(app_views)
+app.url_map.strict_slashes=False
 
 
 @app.teardown_appcontext

@@ -21,7 +21,7 @@ def cities_by_state(state_id):
     if res.get("name") is None:
         abort(400, "Missing name")
     res["state_id"] = state_id
-    city = City(**data)
+    city = City(**res)
     city.save()
     return jsonify(city.to_dict()), 201
 
