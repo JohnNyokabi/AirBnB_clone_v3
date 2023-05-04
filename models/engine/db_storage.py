@@ -57,15 +57,27 @@ class DBStorage:
 
     def get(self, cls, id):
         """returns object based on the class and its ID"""
-        all_obj = self.all(cls)
-        for obj in all_obj.values():
-            if id == str(obj.id):
-                return obj
+        if cls not in classes.values():
+            return None
+
+        all_classes = models.storage.all(cls)
+        for value in all_classes.values():
+            if (value.id == id):
+                return value
+
         return None
 
     def count(self, cls=None):
         """counts number of instances in a class"""
-        return len(self.all(cls))
+        all_cls = classes.values()
+        if not cls:
+            count = 0
+            for c in all_cls:
+                count += len(models.storage.all(c).values())
+        else:
+            count = len(models.storage.all(cls).values())
+
+        return count
 
     def save(self):
         """commit all changes of the current database session"""

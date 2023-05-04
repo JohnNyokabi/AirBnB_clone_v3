@@ -1,30 +1,36 @@
 #!/usr/bin/python3
 """ Script for starting flask web application
 """
-from flask import Flask, jsonify, make_response, url_for, render_template
+from flask import Flask, jsonify
+import models
 from models import storage
 from api.v1.views import app_views
 from flask_cors import CORS
 from os import getenv
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
+CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
+
 app.register_blueprint(app_views)
-app.url_map.strict_slashes=False
 
 
 @app.teardown_appcontext
 def teardown(exception):
-    """ Removes current SQLAlchemy session """
+    """
+Removes current SQLAlchemy session
+"""
     storage.close()
 
 
 @app.errorhandler(404)
 def notFound(error):
     """Returns status of the 404 errors"""
-    return make_response(jsonify({"error": "Not found"}), 404)
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == '__main__':
-    app.run(host=getenv('HBNB_API_HOST', '0.0.0.0'),
-            port=getenv('HBNB_API_PORT', '5000'), threaded=True)
+    host=getenv('HBNB_API_HOST', '0.0.0.0')
+    port=getenv('HBNB_API_PORT', '5000')
+
+    app.run(host=host, port=port, threaded=True)
