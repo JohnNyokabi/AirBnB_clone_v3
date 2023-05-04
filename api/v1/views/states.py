@@ -9,13 +9,13 @@ from models.state import State
 @app_views.route('/states', methods=['GET', 'POST'])
 def all_states():
     """Defines GET and POST methods for route"""
-    states = storage.all("State").values()
     if request.method == 'GET':
-        return jsonify([states.to_dict()], states=states)
+        return jsonify([state.to_dict() for state in
+                        storage.all("State").values()])
 
     res = request.get_json(silent=True)
-    if (!res):
-        return "Not a JSON", 400
+    if res is None:
+        abort(400, "Not a JSON")
     if res.get("name") is None:
         return "Missing name", 400
     state = State(**res)
@@ -27,7 +27,7 @@ def all_states():
 def state_id(state_id):
     """updates the states object"""
     state = storage.get("State", state_id)
-    if (!state):
+    if state is None:
         abort(404)
 
     if request.method == 'GET':
@@ -38,9 +38,10 @@ def state_id(state_id):
         return jsonify({}), 200
 
     res = request.get_json(silent=True)
-    if (!new_dict):
-        return "Not JSON", 400
+    if res is None:
+        abort(400, "Not a JSON")
     avoid = {"id", "created_at", "updated_at"}
-    [setattr(state, k, v) for k, v in res.items() if k not in avoid]
+    [setattr(state, key, value) for key, value in
+     res.items() if key not in avoid]
     state.save()
     return jsonify(state.to_dict())

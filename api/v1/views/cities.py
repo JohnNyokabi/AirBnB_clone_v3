@@ -10,13 +10,13 @@ from flask import jsonify, request, abort
 def cities_by_state(state_id):
     """Defines GET and POST methods for cities object"""
     state = storage.get("State", state_id)
-    if (!state):
+    if state is None:
         abort(404)
 
     if request.method == 'GET':
         return jsonify([city.to_dict() for city in state.cities])
     res = request.get_json(silent=True)
-    if (!res):
+    if res is None:
         abort(400, "Not a JSON")
     if res.get("name") is None:
         abort(400, "Missing name")
@@ -30,7 +30,7 @@ def cities_by_state(state_id):
 def city_id(city_id):
     """Defines update methods for specific city ID"""
     city = storage.all("City", city_id)
-    if (!city):
+    if city is None:
         abort(404)
 
     if request.method == 'GET':

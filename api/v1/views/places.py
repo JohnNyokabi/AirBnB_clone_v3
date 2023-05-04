@@ -22,10 +22,10 @@ def places(city_id):
     if res is None:
         abort(400, "Not a JSON")
     user_id = res.get("user_id")
-    if (!user_id):
+    if user_id is None:
         abort(400, "Missing user_id")
     user = storage.get("User", user_id)
-    if (!user):
+    if user is None:
         abort(404)
     if res.get("name") is None:
         abort(400, "Missing name")
@@ -39,7 +39,7 @@ def places(city_id):
 def place_id(place_id):
     """Updates the place ID objects with GET, PUT and DELETE methods"""
     place = storage.get("Place", place_id)
-    if (!place):
+    if place is None:
         abort(404)
 
     if request.method == 'GET':
@@ -50,7 +50,7 @@ def place_id(place_id):
         return jsonify({}), 200
 
     res = request.get_json(silent=True)
-    if (!res):
+    if res is None:
         abort(400, "Not a JSON")
     avoid = {"id", "user_id", "city_id", "created_at", "updated_at"}
     [setattr(place, k, v) for k, v in res.items() if k not in avoid]

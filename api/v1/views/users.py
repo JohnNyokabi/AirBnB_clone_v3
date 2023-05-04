@@ -30,7 +30,7 @@ def all_users():
 def user_id(user_id):
     """defines specific user ID using GET, PUT and DELETE methods"""
     user = storage.get("User", user_id)
-    if (!user):
+    if user is None:
         abort(404)
 
     if request.method == 'GET':
@@ -41,7 +41,7 @@ def user_id(user_id):
         return jsonify({}), 200
 
     res = request.get_json(silent=True)
-    if (!res):
+    if res is None:
         abort(400, "Not a JSON")
     avoid = {"id", "email", "created_at", "updated_at"}
     [setattr(user, k, v) for k, v in res.items() if k not in avoid]

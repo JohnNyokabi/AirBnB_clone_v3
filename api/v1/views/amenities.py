@@ -14,7 +14,7 @@ def all_amenities():
         return jsonify([amenities.to_dict()], amenities=amenities)
 
     res = request.get_json(silent=True)
-    if data is None:
+    if res is None:
         abort(400, "Not a JSON")
     if res.get("name") is None:
         abort(400, "Missing name")
@@ -27,7 +27,7 @@ def all_amenities():
 def amenity_id(amenity_id):
     """Defines the update methods for Amenity object"""
     amenity = storage.get("Amenity", amenity_id)
-    if (!amenity):
+    if amenity is None:
         abort(404)
 
     if request.method == 'GET':
@@ -38,7 +38,7 @@ def amenity_id(amenity_id):
         return jsonify({}), 200
 
     res = request.get_json(silent=True)
-    if (!res):
+    if res is None:
         abort(400, "Not a JSON")
     avoid = {"id", "created_at", "updated_at"}
     [setattr(amenity, k, v) for k, v in res.items() if k not in avoid]

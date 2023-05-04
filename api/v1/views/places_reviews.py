@@ -20,7 +20,7 @@ def reviews(place_id):
     if res is None:
         abort(400, "Not a JSON")
     user_id = res.get("user_id")
-    if (!user_id):
+    if user_id is None:
         abort(400, "Missing user_id")
     if storage.get("User", user_id) is None:
         abort(404)
