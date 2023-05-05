@@ -6,7 +6,8 @@ from models import storage
 from models.review import Review
 
 
-@app_views('/places/<place_id>/reviews', methods=['GET', 'POST'])
+@app_views.route('/places/<place_id>/reviews',
+                 methods=['GET', 'POST'], strict_slashes=False)
 def reviews(place_id):
     """retrieves list of all Review objects of place"""
     place = storage.get("Place", place_id)
@@ -32,7 +33,8 @@ def reviews(place_id):
     return jsonify(review.to_dict()), 201
 
 
-@app_views.route('/reviews/<review_id>', methods=['GET', 'DELETE', 'PUT'])
+@app_views.route('/reviews/<review_id>',
+                 methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
 def review_id(review_id):
     """Updates a review object"""
     review = storage.get("Review", review_id)
@@ -51,6 +53,6 @@ def review_id(review_id):
     if res is None:
         abort(400, "Not a JSON")
     avoid = {"id", "user_id", "place_id", "created_at", "updated_at"}
-    [setattr(review, k, v) for k, v in res.items(), if k not in avoid]
+    [setattr(review, k, v) for k, v in res.items() if k not in avoid]
     review.save()
     return jsonify(review.to_dict()), 200

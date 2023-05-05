@@ -6,7 +6,8 @@ from flask import request, abort, jsonify
 from models import storage
 
 
-@app_views.route('/users', methods=['GET', 'POST'])
+@app_views.route('/users',
+                 methods=['GET', 'POST'], strict_slashes=False)
 def all_users():
     """Defines list of all users with the POST and GET methods"""
     users = storage.all("User").values()
@@ -26,7 +27,8 @@ def all_users():
     return jsonify(user.to_dict()), 201
 
 
-@app_views.route('/users/<user_id>', methods=['GET', 'DELETE', 'PUT'])
+@app_views.route('/users/<user_id>',
+                 methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
 def user_id(user_id):
     """defines specific user ID using GET, PUT and DELETE methods"""
     user = storage.get("User", user_id)

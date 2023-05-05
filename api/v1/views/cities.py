@@ -6,7 +6,8 @@ from models.city import City
 from flask import jsonify, request, abort
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
+@app_views.route('/states/<state_id>/cities',
+                 methods=['GET', 'POST'], strict_slashes=False)
 def cities_by_state(state_id):
     """Defines GET and POST methods for cities object"""
     state = storage.get("State", state_id)
@@ -26,7 +27,8 @@ def cities_by_state(state_id):
     return jsonify(city.to_dict()), 201
 
 
-@app_views.route('/cities/<city_id>', methods=['GET', 'DELETE', 'PUT'])
+@app_views.route('/cities/<city_id>',
+                 methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
 def city_id(city_id):
     """Defines update methods for specific city ID"""
     city = storage.all("City", city_id)

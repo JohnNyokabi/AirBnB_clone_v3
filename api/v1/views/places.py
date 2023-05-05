@@ -8,7 +8,8 @@ from models.city import City
 from models.amenity import Amenity
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'])
+@app_views.route('/cities/<city_id>/places',
+                 methods=['GET', 'POST'], strict_slashes=False)
 def places(city_id):
     """defines place object using GET and POST methods"""
     city = storage.get("City", city_id)
@@ -35,7 +36,8 @@ def places(city_id):
     return (jsonify(place.to_dict()), 201)
 
 
-@app_views.route('/places/<place_id>', methods=['GET', 'PUT', 'DELETE'])
+@app_views.route('/places/<place_id>',
+                 methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
 def place_id(place_id):
     """Updates the place ID objects with GET, PUT and DELETE methods"""
     place = storage.get("Place", place_id)
@@ -58,7 +60,7 @@ def place_id(place_id):
     return jsonify(place.to_dict()), 200
 
 
-@app_views.route('/places_search', methods=['POST'])
+@app_views.route('/places_search', methods=['POST'], strict_slashes=False)
 def places_search():
     """Retrieves all place objects from JSON"""
     res = request.get_json(silent=True)
