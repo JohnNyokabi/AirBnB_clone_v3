@@ -36,7 +36,7 @@ def reviews(place_id):
 def review_id(review_id):
     """Updates a review object"""
     review = storage.get("Review", review_id)
-    if (!review):
+    if review is None:
         abort(404)
 
     if request.method == 'GET':
