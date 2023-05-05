@@ -2,7 +2,6 @@
 """ Script for starting flask web application
 """
 from flask import Flask, jsonify
-import models
 from models import storage
 from api.v1.views import app_views
 from flask_cors import CORS
@@ -17,9 +16,7 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown(exception):
-    """
-Removes current SQLAlchemy session
-"""
+    """Removes current SQLAlchemy session"""
     storage.close()
 
 
@@ -30,7 +27,7 @@ def notFound(error):
 
 
 if __name__ == '__main__':
-    host=getenv('HBNB_API_HOST', '0.0.0.0')
-    port=getenv('HBNB_API_PORT', '5000')
+    host = getenv('HBNB_API_HOST', '0.0.0.0')
+    port = getenv('HBNB_API_PORT', '5000')
 
     app.run(host=host, port=port, threaded=True)
