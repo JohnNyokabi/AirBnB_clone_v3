@@ -1,4 +1,4 @@
-#!/usr/bin/pyhton3
+#!/usr/bin/python3
 """Creates new view for places amenities objects"""
 from api.v1.views import app_views
 from models import storage
