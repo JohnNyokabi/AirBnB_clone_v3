@@ -19,8 +19,9 @@ def place_amenities(place_id):
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         return jsonify([a.to_dict() for a in place.amenities])
     else:
-        res = storage.get(Amenity, p_id) for p_id in place.amenity_ids
-        return jsonify([res.to_dict()])
+        return jsonify([
+            storage.get(Amenity, p_id).to_dict() for p_id in place.amenity_ids
+        ])
 
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
