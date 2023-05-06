@@ -31,27 +31,27 @@ def all_states(state_id=None):
                  methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
 def state_id(state_id):
     """updates the states object"""
-    state_obj = storage.get('State', state_id)
+    state_obj = storage.get(State, state_id)
     if state_obj is None:
         abort(404)
 
     if request.method == 'GET':
         return jsonify(state_obj.to_dict())
 
-    elif request.method == 'PUT':
-        res_dict = request.get_json()
-
-        if res_dict is None:
-            abort(400, 'Not a JSON')
-        for key, val in res_dict.items():
-            if key not in ["id", "created_at", "updated_at"]:
-                setattr(state_obj, key, val)
-        storage.save()
-        return jsonify(state_obj.to_dict())
-
-    elif request.method == 'DELETE':
+    if request.method == 'DELETE':
         if state_id is None:
             abort(404)
         state_obj.delete()
         storage.save()
         return jsonify({}), 200
+
+    if request.method == 'PUT':
+        res_dict = request.get_json()
+
+        if res_dict is None:
+            abort(400, 'Not a JSON')
+        for key, val in res_dict.items():
+            if key not in ["id", "state_id", "created_at", "updated_at"]:
+                setattr(state_obj, key, val)
+        storage.save()
+        return jsonify(state_obj.to_dict())
